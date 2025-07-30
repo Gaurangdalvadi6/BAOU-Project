@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { adminAPI } from '../services/api';
 import AddCarModal from '../components/AddCarModal';
 import EditCarModal from '../components/EditCarModal';
-import { createImageDataUrl } from '../utils/imageUtils';
+import { getImageUrl } from '../utils/imageUtils';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -181,16 +181,16 @@ const AdminDashboard = () => {
           <div className="cars-grid">
             {cars.map(car => (
               <div key={car.id} className="car-management-card">
-                <div className="car-image">
-                  {car.returnedImage ? (
-                    <img 
-                      src={createImageDataUrl(car.returnedImage)} 
-                      alt={car.name}
-                    />
-                  ) : (
-                    <div className="car-placeholder">🚗</div>
-                  )}
-                </div>
+                                 <div className="car-image">
+                   {car.imagePath ? (
+                     <img 
+                       src={getImageUrl(car.imagePath)} 
+                       alt={car.name}
+                     />
+                   ) : (
+                     <div className="car-placeholder">🚗</div>
+                   )}
+                 </div>
                 
                 <div className="car-info">
                   <h3>{car.name}</h3>

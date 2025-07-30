@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Display Test</title>
+</head>
+<body>
+    <h1>Image Display Test</h1>
+    
+    <h2>Test 1: Direct Image URL</h2>
+    <img src="http://localhost:8080/images/b96159bc-9d85-4207-bd3f-8db1b4fab177.jpg" 
+         alt="Test Car Image" 
+         style="width: 300px; height: 200px; border: 1px solid #ccc;">
+    
+    <h2>Test 2: Generated URL</h2>
+    <img id="generatedImage" 
+         alt="Generated Car Image" 
+         style="width: 300px; height: 200px; border: 1px solid #ccc;">
+    
+    <script>
+        // Test the same URL generation logic as the frontend
+        const getImageUrl = (imagePath) => {
+            if (!imagePath) {
+                return '/placeholder-car.jpg';
+            }
+            
+            if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                return imagePath;
+            }
+            
+            const baseUrl = 'http://localhost:8080';
+            return `${baseUrl}/images/${imagePath}`;
+        };
+        
+        // Set the generated image
+        document.getElementById('generatedImage').src = getImageUrl('b96159bc-9d85-4207-bd3f-8db1b4fab177.jpg');
+        
+        console.log('Generated URL:', getImageUrl('b96159bc-9d85-4207-bd3f-8db1b4fab177.jpg'));
+    </script>
+</body>
+</html> 

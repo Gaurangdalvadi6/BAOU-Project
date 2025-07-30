@@ -9,6 +9,7 @@ import com.rental.entity.Car;
 import com.rental.enums.BookCarStatus;
 import com.rental.repository.BookACarRepository;
 import com.rental.repository.CarRepository;
+import com.rental.utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -28,6 +29,8 @@ public class AdminServiceImpl implements AdminService{
 
     private final BookACarRepository bookACarRepository;
 
+    private final ImageUtils imageUtils;
+
     @Override
     public boolean postCar(CarDto carDto) throws IOException {
         try {
@@ -40,7 +43,13 @@ public class AdminServiceImpl implements AdminService{
             car.setType(carDto.getType());
             car.setDescription(carDto.getDescription());
             car.setTransmission(carDto.getTransmission());
-            car.setImage(carDto.getImage().getBytes());
+            
+            // Save image to file system and store path
+            if (carDto.getImage() != null && !carDto.getImage().isEmpty()) {
+                String imagePath = imageUtils.saveImage(carDto.getImage());
+                car.setImagePath(imagePath);
+            }
+            
             carRepository.save(car);
             return true;
         }catch (Exception e){
@@ -55,7 +64,15 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public void deleteCar(Long id){
-        carRepository.deleteById(id);
+        Optional<Car> optionalCar = carRepository.findById(id);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            // Delete image file if exists
+            if (car.getImagePath() != null) {
+                imageUtils.deleteImage(car.getImagePath());
+            }
+            carRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -69,9 +86,18 @@ public class AdminServiceImpl implements AdminService{
         Optional<Car> optionalCar = carRepository.findById(carId);
         if (optionalCar.isPresent()){
             Car existingCar = optionalCar.get();
-            if (carDto.getImage() != null){
-                existingCar.setImage(carDto.getImage().getBytes());
+            
+            // Handle image update
+            if (carDto.getImage() != null && !carDto.getImage().isEmpty()) {
+                // Delete old image if exists
+                if (existingCar.getImagePath() != null) {
+                    imageUtils.deleteImage(existingCar.getImagePath());
+                }
+                // Save new image
+                String imagePath = imageUtils.saveImage(carDto.getImage());
+                existingCar.setImagePath(imagePath);
             }
+            
             existingCar.setPrice(carDto.getPrice());
             existingCar.setYear(carDto.getYear());
             existingCar.setType(carDto.getType());

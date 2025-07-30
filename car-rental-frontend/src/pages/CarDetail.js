@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { customerAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { createImageDataUrl } from '../utils/imageUtils';
+import { getImageUrl } from '../utils/imageUtils';
 import './CarDetail.css';
 
 const CarDetail = () => {
@@ -125,16 +125,16 @@ const CarDetail = () => {
     <div className="car-detail-container">
       <div className="car-detail-content">
         <div className="car-detail-left">
-          <div className="car-image-large">
-            {car.returnedImage ? (
-              <img 
-                src={createImageDataUrl(car.returnedImage)} 
-                alt={car.name}
-              />
-            ) : (
-              <div className="car-placeholder-large">🚗</div>
-            )}
-          </div>
+                     <div className="car-image-large">
+             {car.imagePath ? (
+               <img 
+                 src={getImageUrl(car.imagePath)} 
+                 alt={car.name}
+               />
+             ) : (
+               <div className="car-placeholder-large">🚗</div>
+             )}
+           </div>
           
           <div className="car-info-detailed">
             <h1>{car.name}</h1>

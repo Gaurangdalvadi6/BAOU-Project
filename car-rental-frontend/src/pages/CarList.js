@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { customerAPI } from '../services/api';
-import { createImageDataUrl } from '../utils/imageUtils';
+import { getImageUrl } from '../utils/imageUtils';
 import './CarList.css';
 
 const CarList = () => {
@@ -154,16 +154,16 @@ const CarList = () => {
         <div className="cars-grid">
           {filteredCars.map(car => (
             <div key={car.id} className="car-card">
-              <div className="car-image">
-                {car.returnedImage ? (
-                  <img 
-                    src={createImageDataUrl(car.returnedImage)} 
-                    alt={car.name}
-                  />
-                ) : (
-                  <div className="car-placeholder">🚗</div>
-                )}
-              </div>
+                             <div className="car-image">
+                 {car.imagePath ? (
+                   <img 
+                     src={getImageUrl(car.imagePath)} 
+                     alt={car.name}
+                   />
+                 ) : (
+                   <div className="car-placeholder">🚗</div>
+                 )}
+               </div>
               
               <div className="car-info">
                 <h3>{car.name}</h3>

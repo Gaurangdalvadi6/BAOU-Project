@@ -30,5 +30,5 @@ public class CarDto {
 
     private MultipartFile image;
 
-    private byte[] returnedImage;
+    private String imagePath;
 }

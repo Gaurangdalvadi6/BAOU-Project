@@ -31,8 +31,8 @@ public class Car {
 
     private Date year;
 
-    @Column(columnDefinition = "longblob")
-    private byte[] image;
+    @Column(name = "image_path")
+    private String imagePath;
 
     public CarDto getCarDto(){
         CarDto carDto = new CarDto();
@@ -45,7 +45,7 @@ public class Car {
         carDto.setDescription(description);
         carDto.setPrice(price);
         carDto.setYear(year);
-        carDto.setReturnedImage(image);
+        carDto.setImagePath(imagePath);
         return carDto;
     }
 }
